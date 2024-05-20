@@ -7,12 +7,11 @@ describe('xnemect-surgeon-list', () => {
       components: [XnemectSurgeonList],
       html: `<xnemect-surgeon-list></xnemect-surgeon-list>`,
     });
-    expect(page.root).toEqualHtml(`
-      <xnemect-surgeon-list>
-        <mock:shadow-root>
-          <slot></slot>
-        </mock:shadow-root>
-      </xnemect-surgeon-list>
-    `);
+
+    const wlList = page.rootInstance as XnemectSurgeonList;
+    const expectedPatients = wlList?.waitingPatients?.length;
+
+    const items = page.root.shadowRoot.querySelectorAll('md-list-item');
+    expect(items.length).toEqual(expectedPatients);
   });
 });
