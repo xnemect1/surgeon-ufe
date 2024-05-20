@@ -6,56 +6,32 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+    interface XnemectSurgeonList {
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLXnemectSurgeonListElement extends Components.XnemectSurgeonList, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLXnemectSurgeonListElement: {
+        prototype: HTMLXnemectSurgeonListElement;
+        new (): HTMLXnemectSurgeonListElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "xnemect-surgeon-list": HTMLXnemectSurgeonListElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+    interface XnemectSurgeonList {
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "xnemect-surgeon-list": XnemectSurgeonList;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "xnemect-surgeon-list": LocalJSX.XnemectSurgeonList & JSXBase.HTMLAttributes<HTMLXnemectSurgeonListElement>;
         }
     }
 }
