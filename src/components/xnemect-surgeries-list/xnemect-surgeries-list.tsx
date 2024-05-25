@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { SurgeriesListEntry, SurgeriesListApiFactory } from '../../api/surgeon-wl';
+import { SurgeryEntry, SurgeriesListApiFactory } from '../../api/surgeon-wl';
 
 @Component({
   tag: 'xnemect-surgeries-list',
@@ -12,11 +12,11 @@ export class XnemectSurgeriesList {
   @Prop() surgeonId: string;
   @State() errorMessage: string;
 
-  surgeries: SurgeriesListEntry[];
+  surgeries: SurgeryEntry[];
 
-  private async getWaitingPatientsAsync(): Promise<SurgeriesListEntry[]> {
+  private async getSurgeonSurgeriesAsync(): Promise<SurgeryEntry[]> {
     try {
-      const response = await SurgeriesListApiFactory(undefined, this.apiBase).getSurgeonSurgeries(this.surgeonId);
+      const response = await SurgeriesListApiFactory(undefined, this.apiBase).getSurgeryEntries(this.surgeonId);
       if (response.status < 299) {
         return response.data;
       } else {
@@ -29,7 +29,7 @@ export class XnemectSurgeriesList {
   }
 
   async componentWillLoad() {
-    this.surgeries = await this.getWaitingPatientsAsync();
+    this.surgeries = await this.getSurgeonSurgeriesAsync();
   }
 
   render() {
@@ -39,15 +39,24 @@ export class XnemectSurgeriesList {
           <div class="error">{this.errorMessage}</div>
         ) : (
           <md-list>
-            {this.surgeries.map((patient, index) => (
-              <md-list-item onClick={() => this.entryClicked.emit(index.toString())}>
-                <div slot="headline">{patient.id}</div>
-                <div slot="supporting-text">{'Predpokladaný vstup: ' + this.isoDateToLocale(patient.surgeryDetail.date)}</div>
+            {this.surgeries.map(surgery => (
+              <md-list-item
+                onClick={() => {
+                  console.log('Emitting event for surgery id:', surgery.id);
+                  this.entryClicked.emit(surgery.id);
+                }}
+              >
+                <div slot="headline">{surgery.id}</div>
+                <div slot="supporting-text">{'Dátum a čas operácie: ' + surgery.date}</div>
+                <div slot="supporting-text">{'Operovaná končatina: ' + surgery.operatedLimb.value}</div>
                 <md-icon slot="start">person</md-icon>
               </md-list-item>
             ))}
           </md-list>
         )}
+        <md-filled-icon-button class="add-button" onclick={() => this.entryClicked.emit('@new')}>
+          <md-icon>add</md-icon>
+        </md-filled-icon-button>
       </Host>
     );
   }

@@ -4,7 +4,7 @@
     "useDocker": true,
     "version": "6.6.0",
     "generators": {
-      "ambulance-wl": {
+      "surgeon-wl": {
         "generatorName": "typescript-axios",
         "glob": "api/surgeon-wl.openapi.yaml",
         "output": "#{cwd}/src/api/surgeon-wl",

@@ -10,7 +10,7 @@ describe('xnemect-surgeon-app', () => {
     });
     page.win.navigation = new EventTarget();
     const child = await page.root.shadowRoot.firstElementChild;
-    expect(child.tagName.toLocaleLowerCase()).toEqual('xnemect-surgeon-editor');
+    expect(child.tagName.toLocaleLowerCase()).toEqual('xnemect-surgery-editor');
   });
 
   it('renders list', async () => {

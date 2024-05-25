@@ -18,7 +18,9 @@ export namespace Components {
         "surgeonId": string;
     }
     interface XnemectSurgeryEditor {
+        "apiBase": string;
         "entryId": string;
+        "surgeonId": string;
     }
 }
 export interface XnemectSurgeonListCustomEvent<T> extends CustomEvent<T> {
@@ -113,8 +115,10 @@ declare namespace LocalJSX {
         "surgeonId"?: string;
     }
     interface XnemectSurgeryEditor {
+        "apiBase"?: string;
         "entryId"?: string;
         "onEditor-closed"?: (event: XnemectSurgeryEditorCustomEvent<string>) => void;
+        "surgeonId"?: string;
     }
     interface IntrinsicElements {
         "xnemect-surgeon-app": XnemectSurgeonApp;

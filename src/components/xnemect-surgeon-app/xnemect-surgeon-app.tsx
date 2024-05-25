@@ -18,6 +18,7 @@ export class XnemectSurgeonApp {
   @Prop() surgeonId: string;
 
   componentWillLoad() {
+    console.log('APP has loaded');
     const baseUri = new URL(this.basePath, document.baseURI || '/').pathname;
 
     const toRelative = (path: string) => {
@@ -34,6 +35,7 @@ export class XnemectSurgeonApp {
       }
       let path = new URL((ev as any).destination.url).pathname;
       toRelative(path);
+      console.log('Updated relative path:', this.relativePath); // Debug log
     });
 
     toRelative(location.pathname);
@@ -46,9 +48,11 @@ export class XnemectSurgeonApp {
     if (this.relativePath.startsWith('entry/')) {
       element = 'editor';
       entryId = this.relativePath.split('/')[1];
+      console.log('Current element:', element, 'Entry ID:', entryId); // Debug log
     }
 
     const navigate = (path: string) => {
+      console.log('Navigating to:', path); // Debug log
       const absolute = new URL(path, new URL(this.basePath, document.baseURI)).pathname;
       window.navigation.navigate(absolute);
     };
@@ -56,7 +60,7 @@ export class XnemectSurgeonApp {
     return (
       <Host>
         {element === 'editor' ? (
-          <xnemect-surgeon-editor entry-id={entryId} oneditor-closed={() => navigate('./list')}></xnemect-surgeon-editor>
+          <xnemect-surgery-editor entry-id={entryId} surgeon-id={this.surgeonId} api-base={this.apiBase} oneditor-closed={() => navigate('./list')}></xnemect-surgery-editor>
         ) : (
           <xnemect-surgeries-list
             surgeon-id={this.surgeonId}

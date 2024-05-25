@@ -2,31 +2,31 @@ import { newSpecPage } from '@stencil/core/testing';
 import { XnemectSurgeriesList } from '../xnemect-surgeries-list';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { SurgeriesListEntry } from '../../../api/surgeon-wl';
+import { SurgeryEntry } from '../../../api/surgeon-wl';
 
 describe('xnemect-surgeries-list', () => {
-  const sampleEntries: SurgeriesListEntry[] = [
+  const sampleEntries: SurgeryEntry[] = [
     {
       id: 'entry-1',
       patientId: 'p-1',
-      surgeryDetail: {
-        // Properly nest the object here
-        date: '2024-02-10',
-        successful: true,
-        operatedLimb: 'left hand',
-        surgeryNote: 'Surgery was successful without any complications.',
+      surgeonId: 's-1',
+      date: '2024-02-10',
+      successful: true,
+      operatedLimb: {
+        value: 'Lava ruka',
       },
+      surgeryNote: 'Surgery was successful without any complications.',
     },
     {
       id: 'entry-2',
       patientId: 'p-2',
-      surgeryDetail: {
-        // Provide at least the mandatory 'date' property
-        date: '2024-03-15',
-        successful: false,
-        operatedLimb: 'right leg',
-        surgeryNote: 'Complications occurred during the surgery.',
+      surgeonId: 's-1',
+      date: '2024-03-15',
+      successful: false,
+      operatedLimb: {
+        value: 'Prava noha',
       },
+      surgeryNote: 'Complications occurred during the surgery.',
     },
   ];
 

@@ -1,4 +1,5 @@
 import { Component, Host, Prop, State, h, EventEmitter, Event } from '@stencil/core';
+import { SurgeryEntry, SurgeriesListApiFactory, OperatedLimb, SurgeryOperatedLimbApiFactory } from '../../api/surgeon-wl';
 @Component({
   tag: 'xnemect-surgery-editor',
   styleUrl: 'xnemect-surgery-editor.css',
@@ -6,62 +7,129 @@ import { Component, Host, Prop, State, h, EventEmitter, Event } from '@stencil/c
 })
 export class XnemectSurgeryEditor {
   @Prop() entryId: string;
+  @Prop() surgeonId: string;
+  @Prop() apiBase: string;
 
   @Event({ eventName: 'editor-closed' }) editorClosed: EventEmitter<string>;
 
-  @State() private duration = 15;
+  @State() entry: SurgeryEntry;
+  @State() operatedLimbs: OperatedLimb[];
+  @State() errorMessage: string;
+  @State() isValid: boolean;
 
-  private handleSliderInput(event: Event) {
-    this.duration = +(event.target as HTMLInputElement).value;
+  private formElement: HTMLFormElement;
+
+  private async getSurgeryEntryAsync(): Promise<SurgeryEntry> {
+    if (this.entryId === '@new') {
+      this.isValid = false;
+      this.entry = {
+        id: '@new',
+        surgeonId: '',
+        patientId: '',
+        date: '',
+        successful: true,
+        surgeryNote: '',
+        operatedLimb: {
+          value: 'Hlava',
+        },
+      };
+      return this.entry;
+    }
+
+    if (!this.entryId) {
+      this.isValid = false;
+      return undefined;
+    }
+    try {
+      const response = await SurgeriesListApiFactory(undefined, this.apiBase).getSurgeryEntry(this.surgeonId, this.entryId);
+
+      if (response.status < 299) {
+        this.entry = response.data;
+        this.isValid = true;
+      } else {
+        this.errorMessage = `Cannot retrieve list of surgeries: ${response.statusText}`;
+      }
+    } catch (err: any) {
+      this.errorMessage = `Cannot retrieve list of surgeries: ${err.message || 'unknown'}`;
+    }
+    return undefined;
+  }
+
+  private async getOperatedLimbs(): Promise<OperatedLimb[]> {
+    try {
+      const response = await SurgeryOperatedLimbApiFactory(undefined, this.apiBase).getOperatedLimbList();
+      if (response.status < 299) {
+        this.operatedLimbs = response.data;
+      }
+    } catch (err: any) {
+      // no strong dependency on conditions
+    }
+    // always have some fallback condition
+    return (
+      this.operatedLimbs || [
+        {
+          code: 'fallback',
+          value: 'Neurčena pozicia',
+        },
+      ]
+    );
+  }
+
+  async componentWillLoad() {
+    this.getSurgeryEntryAsync();
+    this.getOperatedLimbs();
   }
 
   render() {
+    if (this.errorMessage) {
+      return (
+        <Host>
+          <div class="error">{this.errorMessage}</div>
+        </Host>
+      );
+    }
     return (
       <Host>
-        <md-filled-text-field label="Meno a Priezvisko">
-          <md-icon slot="leading-icon">person</md-icon>
-        </md-filled-text-field>
+        <form ref={el => (this.formElement = el)}>
+          <md-filled-text-field
+            label="Dátum"
+            required
+            value={this.entry?.date}
+            oninput={(ev: InputEvent) => {
+              if (this.entry) {
+                this.entry.date = this.handleInputEvent(ev);
+              }
+            }}
+          ></md-filled-text-field>
 
-        <md-filled-text-field label="Registračné číslo pacienta">
-          <md-icon slot="leading-icon">fingerprint</md-icon>
-        </md-filled-text-field>
+          <md-checkbox
+            id="successfulCheckbox" // Unique ID for the checkbox
+            required
+            checked={this.entry?.successful}
+            onInput={(ev: InputEvent) => {
+              const checkbox = ev.target as HTMLInputElement;
+              if (this.entry) {
+                this.entry.successful = checkbox.checked; // Directly use the 'checked' property
+              }
+            }}
+          ></md-checkbox>
+          <label htmlFor="successfulCheckbox">Úspešnosť</label>
 
-        <md-filled-text-field label="Dátum operácie" disabled>
-          <md-icon slot="leading-icon">watch_later</md-icon>
-        </md-filled-text-field>
+          {this.renderConditions()}
+          <md-filled-text-field
+            label="Popis operácie"
+            value={this.entry?.surgeryNote}
+            oninput={(ev: InputEvent) => {
+              if (this.entry) {
+                this.entry.surgeryNote = this.handleInputEvent(ev);
+              }
+            }}
+          ></md-filled-text-field>
+        </form>
 
-        <md-filled-select label="Operovaná časť">
-          <md-icon slot="leading-icon">sick</md-icon>
-          <md-select-option value="folowup">
-            <div slot="headline">Pravá ruka</div>
-          </md-select-option>
-          <md-select-option value="nausea">
-            <div slot="headline">Ľavá ruka</div>
-          </md-select-option>
-          <md-select-option value="fever">
-            <div slot="headline">Pravá noha</div>
-          </md-select-option>
-          <md-select-option value="ache-in-throat">
-            <div slot="headline">Ľavá noha</div>
-          </md-select-option>
-          <md-select-option value="ache-in-throat">
-            <div slot="headline">Hlava</div>
-          </md-select-option>
-          <md-select-option value="ache-in-throat">
-            <div slot="headline">Brucho</div>
-          </md-select-option>
-        </md-filled-select>
-
-        <div class="duration-slider">
-          <span class="label">Predpokladaná doba trvania:&nbsp; </span>
-          <span class="label">{this.duration}</span>
-          <span class="label">&nbsp;minút</span>
-          <md-slider min="2" max="45" value={this.duration} ticks labeled oninput={this.handleSliderInput.bind(this)}></md-slider>
-        </div>
-
-        <md-divider></md-divider>
+        <md-divider inset></md-divider>
         <div class="actions">
-          <md-filled-tonal-button id="delete" onClick={() => this.editorClosed.emit('delete')}>
+          <md-filled-tonal-button id="delete" disabled={!this.entry || this.entry?.id === '@new'} onClick={() => this.deleteEntry()}>
             <md-icon slot="icon">delete</md-icon>
             Zmazať
           </md-filled-tonal-button>
@@ -69,12 +137,83 @@ export class XnemectSurgeryEditor {
           <md-outlined-button id="cancel" onClick={() => this.editorClosed.emit('cancel')}>
             Zrušiť
           </md-outlined-button>
-          <md-filled-button id="confirm" onClick={() => this.editorClosed.emit('store')}>
+          <md-filled-button id="confirm" disabled={!this.isValid} onClick={() => this.updateEntry()}>
             <md-icon slot="icon">save</md-icon>
             Uložiť
           </md-filled-button>
         </div>
       </Host>
     );
+  }
+
+  private renderConditions() {
+    let limbs = this.operatedLimbs || [];
+    // we want to have this.entry`s condition in the selection list
+    if (this.entry?.operatedLimb) {
+      const index = limbs.findIndex(condition => condition.code === this.entry.operatedLimb.code);
+      if (index < 0) {
+        limbs = [this.entry.operatedLimb, ...limbs];
+      }
+    }
+    return (
+      <md-filled-select label="Operovaná končatina" display-text={this.entry?.operatedLimb?.value} oninput={(ev: InputEvent) => this.handleCondition(ev)}>
+        {limbs.map(condition => {
+          return (
+            <md-select-option value={condition.code} selected={condition.code === this.entry?.operatedLimb?.code}>
+              <div slot="headline">{condition.value}</div>
+            </md-select-option>
+          );
+        })}
+      </md-filled-select>
+    );
+  }
+  private handleCondition(ev: InputEvent) {
+    if (this.entry) {
+      const code = this.handleInputEvent(ev);
+      const limb = this.operatedLimbs.find(limb => limb.code === code);
+      this.entry.operatedLimb = Object.assign({}, limb);
+    }
+  }
+
+  private handleInputEvent(ev: InputEvent): string {
+    const target = ev.target as HTMLInputElement;
+    // check validity of elements
+    this.isValid = true;
+    for (let i = 0; i < this.formElement.children.length; i++) {
+      const element = this.formElement.children[i];
+      if ('reportValidity' in element) {
+        const valid = (element as HTMLInputElement).reportValidity();
+        this.isValid &&= valid;
+      }
+    }
+    return target.value;
+  }
+
+  private async updateEntry() {
+    try {
+      // store or update
+      const api = SurgeriesListApiFactory(undefined, this.apiBase);
+      const response = this.entryId === '@new' ? await api.createSurgeryEntry(this.surgeonId, this.entry) : await api.updateSurgeryEntry(this.surgeonId, this.entryId, this.entry);
+      if (response.status < 299) {
+        this.editorClosed.emit('store');
+      } else {
+        this.errorMessage = `Cannot store entry: ${response.statusText}`;
+      }
+    } catch (err: any) {
+      this.errorMessage = `Cannot store entry: ${err.message || 'unknown'}`;
+    }
+  }
+
+  private async deleteEntry() {
+    try {
+      const response = await SurgeriesListApiFactory(undefined, this.apiBase).deleteSurgeryEntry(this.surgeonId, this.entryId);
+      if (response.status < 299) {
+        this.editorClosed.emit('delete');
+      } else {
+        this.errorMessage = `Cannot delete entry: ${response.statusText}`;
+      }
+    } catch (err: any) {
+      this.errorMessage = `Cannot delete entry: ${err.message || 'unknown'}`;
+    }
   }
 }

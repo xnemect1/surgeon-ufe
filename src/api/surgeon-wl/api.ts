@@ -24,73 +24,73 @@ import type { RequestArgs } from './base';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 
 /**
+ * Location on body that was operated
+ * @export
+ * @interface OperatedLimb
+ */
+export interface OperatedLimb {
+    /**
+     * 
+     * @type {string}
+     * @memberof OperatedLimb
+     */
+    'value': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OperatedLimb
+     */
+    'code'?: string;
+}
+/**
  * 
  * @export
- * @interface SurgeriesListEntry
+ * @interface SurgeryEntry
  */
-export interface SurgeriesListEntry {
+export interface SurgeryEntry {
     /**
      * Unique id of the entry in this surgeries list
      * @type {string}
-     * @memberof SurgeriesListEntry
+     * @memberof SurgeryEntry
      */
     'id': string;
     /**
+     * Unique identifier of the surgeon known to Web-In-Cloud system
+     * @type {string}
+     * @memberof SurgeryEntry
+     */
+    'surgeonId': string;
+    /**
      * Unique identifier of the patient known to Web-In-Cloud system
      * @type {string}
-     * @memberof SurgeriesListEntry
+     * @memberof SurgeryEntry
      */
-    'patientId'?: string;
-    /**
-     * 
-     * @type {SurgeryDetail}
-     * @memberof SurgeriesListEntry
-     */
-    'surgeryDetail': SurgeryDetail;
-}
-/**
- * Detail about surgery
- * @export
- * @interface SurgeryDetail
- */
-export interface SurgeryDetail {
+    'patientId': string;
     /**
      * 
      * @type {string}
-     * @memberof SurgeryDetail
+     * @memberof SurgeryEntry
      */
     'date': string;
     /**
      * 
      * @type {boolean}
-     * @memberof SurgeryDetail
+     * @memberof SurgeryEntry
      */
     'successful': boolean;
     /**
      * 
      * @type {string}
-     * @memberof SurgeryDetail
+     * @memberof SurgeryEntry
      */
-    'operatedLimb': SurgeryDetailOperatedLimbEnum;
+    'surgeryNote'?: string;
     /**
      * 
-     * @type {string}
-     * @memberof SurgeryDetail
+     * @type {OperatedLimb}
+     * @memberof SurgeryEntry
      */
-    'surgeryNote': string;
+    'operatedLimb': OperatedLimb;
 }
-
-export const SurgeryDetailOperatedLimbEnum = {
-    LeftHand: 'left hand',
-    RightHand: 'right hand',
-    LeftLeg: 'left leg',
-    RightLeg: 'right leg',
-    Head: 'head',
-    Body: 'body'
-} as const;
-
-export type SurgeryDetailOperatedLimbEnum = typeof SurgeryDetailOperatedLimbEnum[keyof typeof SurgeryDetailOperatedLimbEnum];
-
 
 /**
  * SurgeriesListApi - axios parameter creator
@@ -99,17 +99,488 @@ export type SurgeryDetailOperatedLimbEnum = typeof SurgeryDetailOperatedLimbEnum
 export const SurgeriesListApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Use this method to store new entry into the surgeries list.
+         * @summary Saves new entry into surgeries list
+         * @param {string} surgeonId pass the id of the particular surgeon
+         * @param {SurgeryEntry} surgeryEntry Surgery entry to store
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSurgeryEntry: async (surgeonId: string, surgeryEntry: SurgeryEntry, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'surgeonId' is not null or undefined
+            assertParamExists('createSurgeryEntry', 'surgeonId', surgeonId)
+            // verify required parameter 'surgeryEntry' is not null or undefined
+            assertParamExists('createSurgeryEntry', 'surgeryEntry', surgeryEntry)
+            const localVarPath = `/surgeries-list/{surgeonId}/entries`
+                .replace(`{${"surgeonId"}}`, encodeURIComponent(String(surgeonId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(surgeryEntry, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to delete the specific entry from the surgeries list.
+         * @summary Deletes specific entry
+         * @param {string} surgeonId pass the id of the particular surgery
+         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSurgeryEntry: async (surgeonId: string, entryId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'surgeonId' is not null or undefined
+            assertParamExists('deleteSurgeryEntry', 'surgeonId', surgeonId)
+            // verify required parameter 'entryId' is not null or undefined
+            assertParamExists('deleteSurgeryEntry', 'entryId', entryId)
+            const localVarPath = `/surgeries-list/{surgeonId}/entries/{entryId}`
+                .replace(`{${"surgeonId"}}`, encodeURIComponent(String(surgeonId)))
+                .replace(`{${"entryId"}}`, encodeURIComponent(String(entryId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * By using surgeonId you get list of surgeries performed by surgeon
          * @summary Provides surgeries of surgeon
          * @param {string} surgeonId pass the id of the particular surgeon
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSurgeonSurgeries: async (surgeonId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getSurgeryEntries: async (surgeonId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'surgeonId' is not null or undefined
-            assertParamExists('getSurgeonSurgeries', 'surgeonId', surgeonId)
+            assertParamExists('getSurgeryEntries', 'surgeonId', surgeonId)
             const localVarPath = `/surgeries-list/{surgeonId}/entries`
                 .replace(`{${"surgeonId"}}`, encodeURIComponent(String(surgeonId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * By using surgeonId and entryId you can details of particular entry item surgery.
+         * @summary Provides details about waiting list entry
+         * @param {string} surgeonId pass the id of the particular surgery
+         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSurgeryEntry: async (surgeonId: string, entryId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'surgeonId' is not null or undefined
+            assertParamExists('getSurgeryEntry', 'surgeonId', surgeonId)
+            // verify required parameter 'entryId' is not null or undefined
+            assertParamExists('getSurgeryEntry', 'entryId', entryId)
+            const localVarPath = `/surgeries-list/{surgeonId}/entries/{entryId}`
+                .replace(`{${"surgeonId"}}`, encodeURIComponent(String(surgeonId)))
+                .replace(`{${"entryId"}}`, encodeURIComponent(String(entryId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Use this method to update content of the waiting list entry.
+         * @summary Updates specific entry
+         * @param {string} surgeonId pass the id of the particular ambulance
+         * @param {string} entryId pass the id of the particular entry in the s list
+         * @param {SurgeryEntry} surgeryEntry Waiting list entry to update
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSurgeryEntry: async (surgeonId: string, entryId: string, surgeryEntry: SurgeryEntry, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'surgeonId' is not null or undefined
+            assertParamExists('updateSurgeryEntry', 'surgeonId', surgeonId)
+            // verify required parameter 'entryId' is not null or undefined
+            assertParamExists('updateSurgeryEntry', 'entryId', entryId)
+            // verify required parameter 'surgeryEntry' is not null or undefined
+            assertParamExists('updateSurgeryEntry', 'surgeryEntry', surgeryEntry)
+            const localVarPath = `/surgeries-list/{surgeonId}/entries/{entryId}`
+                .replace(`{${"surgeonId"}}`, encodeURIComponent(String(surgeonId)))
+                .replace(`{${"entryId"}}`, encodeURIComponent(String(entryId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(surgeryEntry, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SurgeriesListApi - functional programming interface
+ * @export
+ */
+export const SurgeriesListApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SurgeriesListApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Use this method to store new entry into the surgeries list.
+         * @summary Saves new entry into surgeries list
+         * @param {string} surgeonId pass the id of the particular surgeon
+         * @param {SurgeryEntry} surgeryEntry Surgery entry to store
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSurgeryEntry(surgeonId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SurgeryEntry>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSurgeryEntry(surgeonId, surgeryEntry, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to delete the specific entry from the surgeries list.
+         * @summary Deletes specific entry
+         * @param {string} surgeonId pass the id of the particular surgery
+         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSurgeryEntry(surgeonId, entryId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * By using surgeonId you get list of surgeries performed by surgeon
+         * @summary Provides surgeries of surgeon
+         * @param {string} surgeonId pass the id of the particular surgeon
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSurgeryEntries(surgeonId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SurgeryEntry>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSurgeryEntries(surgeonId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * By using surgeonId and entryId you can details of particular entry item surgery.
+         * @summary Provides details about waiting list entry
+         * @param {string} surgeonId pass the id of the particular surgery
+         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SurgeryEntry>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSurgeryEntry(surgeonId, entryId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Use this method to update content of the waiting list entry.
+         * @summary Updates specific entry
+         * @param {string} surgeonId pass the id of the particular ambulance
+         * @param {string} entryId pass the id of the particular entry in the s list
+         * @param {SurgeryEntry} surgeryEntry Waiting list entry to update
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateSurgeryEntry(surgeonId: string, entryId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SurgeryEntry>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateSurgeryEntry(surgeonId, entryId, surgeryEntry, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SurgeriesListApi - factory interface
+ * @export
+ */
+export const SurgeriesListApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SurgeriesListApiFp(configuration)
+    return {
+        /**
+         * Use this method to store new entry into the surgeries list.
+         * @summary Saves new entry into surgeries list
+         * @param {string} surgeonId pass the id of the particular surgeon
+         * @param {SurgeryEntry} surgeryEntry Surgery entry to store
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSurgeryEntry(surgeonId: string, surgeryEntry: SurgeryEntry, options?: any): AxiosPromise<SurgeryEntry> {
+            return localVarFp.createSurgeryEntry(surgeonId, surgeryEntry, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to delete the specific entry from the surgeries list.
+         * @summary Deletes specific entry
+         * @param {string} surgeonId pass the id of the particular surgery
+         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSurgeryEntry(surgeonId: string, entryId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteSurgeryEntry(surgeonId, entryId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * By using surgeonId you get list of surgeries performed by surgeon
+         * @summary Provides surgeries of surgeon
+         * @param {string} surgeonId pass the id of the particular surgeon
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSurgeryEntries(surgeonId: string, options?: any): AxiosPromise<Array<SurgeryEntry>> {
+            return localVarFp.getSurgeryEntries(surgeonId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * By using surgeonId and entryId you can details of particular entry item surgery.
+         * @summary Provides details about waiting list entry
+         * @param {string} surgeonId pass the id of the particular surgery
+         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSurgeryEntry(surgeonId: string, entryId: string, options?: any): AxiosPromise<SurgeryEntry> {
+            return localVarFp.getSurgeryEntry(surgeonId, entryId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Use this method to update content of the waiting list entry.
+         * @summary Updates specific entry
+         * @param {string} surgeonId pass the id of the particular ambulance
+         * @param {string} entryId pass the id of the particular entry in the s list
+         * @param {SurgeryEntry} surgeryEntry Waiting list entry to update
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSurgeryEntry(surgeonId: string, entryId: string, surgeryEntry: SurgeryEntry, options?: any): AxiosPromise<SurgeryEntry> {
+            return localVarFp.updateSurgeryEntry(surgeonId, entryId, surgeryEntry, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SurgeriesListApi - interface
+ * @export
+ * @interface SurgeriesListApi
+ */
+export interface SurgeriesListApiInterface {
+    /**
+     * Use this method to store new entry into the surgeries list.
+     * @summary Saves new entry into surgeries list
+     * @param {string} surgeonId pass the id of the particular surgeon
+     * @param {SurgeryEntry} surgeryEntry Surgery entry to store
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApiInterface
+     */
+    createSurgeryEntry(surgeonId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig): AxiosPromise<SurgeryEntry>;
+
+    /**
+     * Use this method to delete the specific entry from the surgeries list.
+     * @summary Deletes specific entry
+     * @param {string} surgeonId pass the id of the particular surgery
+     * @param {string} entryId pass the id of the particular entry in the waiting list
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApiInterface
+     */
+    deleteSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * By using surgeonId you get list of surgeries performed by surgeon
+     * @summary Provides surgeries of surgeon
+     * @param {string} surgeonId pass the id of the particular surgeon
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApiInterface
+     */
+    getSurgeryEntries(surgeonId: string, options?: AxiosRequestConfig): AxiosPromise<Array<SurgeryEntry>>;
+
+    /**
+     * By using surgeonId and entryId you can details of particular entry item surgery.
+     * @summary Provides details about waiting list entry
+     * @param {string} surgeonId pass the id of the particular surgery
+     * @param {string} entryId pass the id of the particular entry in the waiting list
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApiInterface
+     */
+    getSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig): AxiosPromise<SurgeryEntry>;
+
+    /**
+     * Use this method to update content of the waiting list entry.
+     * @summary Updates specific entry
+     * @param {string} surgeonId pass the id of the particular ambulance
+     * @param {string} entryId pass the id of the particular entry in the s list
+     * @param {SurgeryEntry} surgeryEntry Waiting list entry to update
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApiInterface
+     */
+    updateSurgeryEntry(surgeonId: string, entryId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig): AxiosPromise<SurgeryEntry>;
+
+}
+
+/**
+ * SurgeriesListApi - object-oriented interface
+ * @export
+ * @class SurgeriesListApi
+ * @extends {BaseAPI}
+ */
+export class SurgeriesListApi extends BaseAPI implements SurgeriesListApiInterface {
+    /**
+     * Use this method to store new entry into the surgeries list.
+     * @summary Saves new entry into surgeries list
+     * @param {string} surgeonId pass the id of the particular surgeon
+     * @param {SurgeryEntry} surgeryEntry Surgery entry to store
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApi
+     */
+    public createSurgeryEntry(surgeonId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig) {
+        return SurgeriesListApiFp(this.configuration).createSurgeryEntry(surgeonId, surgeryEntry, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to delete the specific entry from the surgeries list.
+     * @summary Deletes specific entry
+     * @param {string} surgeonId pass the id of the particular surgery
+     * @param {string} entryId pass the id of the particular entry in the waiting list
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApi
+     */
+    public deleteSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig) {
+        return SurgeriesListApiFp(this.configuration).deleteSurgeryEntry(surgeonId, entryId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * By using surgeonId you get list of surgeries performed by surgeon
+     * @summary Provides surgeries of surgeon
+     * @param {string} surgeonId pass the id of the particular surgeon
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApi
+     */
+    public getSurgeryEntries(surgeonId: string, options?: AxiosRequestConfig) {
+        return SurgeriesListApiFp(this.configuration).getSurgeryEntries(surgeonId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * By using surgeonId and entryId you can details of particular entry item surgery.
+     * @summary Provides details about waiting list entry
+     * @param {string} surgeonId pass the id of the particular surgery
+     * @param {string} entryId pass the id of the particular entry in the waiting list
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApi
+     */
+    public getSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig) {
+        return SurgeriesListApiFp(this.configuration).getSurgeryEntry(surgeonId, entryId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Use this method to update content of the waiting list entry.
+     * @summary Updates specific entry
+     * @param {string} surgeonId pass the id of the particular ambulance
+     * @param {string} entryId pass the id of the particular entry in the s list
+     * @param {SurgeryEntry} surgeryEntry Waiting list entry to update
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SurgeriesListApi
+     */
+    public updateSurgeryEntry(surgeonId: string, entryId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig) {
+        return SurgeriesListApiFp(this.configuration).updateSurgeryEntry(surgeonId, entryId, surgeryEntry, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SurgeryOperatedLimbApi - axios parameter creator
+ * @export
+ */
+export const SurgeryOperatedLimbApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Get a list of predefined operated limbs applicable to surgeries
+         * @summary Provides the list of operated limbs associated with surgeries
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOperatedLimbList: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/surgeries-list/operatedLimbList`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -136,81 +607,77 @@ export const SurgeriesListApiAxiosParamCreator = function (configuration?: Confi
 };
 
 /**
- * SurgeriesListApi - functional programming interface
+ * SurgeryOperatedLimbApi - functional programming interface
  * @export
  */
-export const SurgeriesListApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = SurgeriesListApiAxiosParamCreator(configuration)
+export const SurgeryOperatedLimbApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SurgeryOperatedLimbApiAxiosParamCreator(configuration)
     return {
         /**
-         * By using surgeonId you get list of surgeries performed by surgeon
-         * @summary Provides surgeries of surgeon
-         * @param {string} surgeonId pass the id of the particular surgeon
+         * Get a list of predefined operated limbs applicable to surgeries
+         * @summary Provides the list of operated limbs associated with surgeries
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSurgeonSurgeries(surgeonId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SurgeriesListEntry>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getSurgeonSurgeries(surgeonId, options);
+        async getOperatedLimbList(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OperatedLimb>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getOperatedLimbList(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * SurgeriesListApi - factory interface
+ * SurgeryOperatedLimbApi - factory interface
  * @export
  */
-export const SurgeriesListApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = SurgeriesListApiFp(configuration)
+export const SurgeryOperatedLimbApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SurgeryOperatedLimbApiFp(configuration)
     return {
         /**
-         * By using surgeonId you get list of surgeries performed by surgeon
-         * @summary Provides surgeries of surgeon
-         * @param {string} surgeonId pass the id of the particular surgeon
+         * Get a list of predefined operated limbs applicable to surgeries
+         * @summary Provides the list of operated limbs associated with surgeries
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSurgeonSurgeries(surgeonId: string, options?: any): AxiosPromise<Array<SurgeriesListEntry>> {
-            return localVarFp.getSurgeonSurgeries(surgeonId, options).then((request) => request(axios, basePath));
+        getOperatedLimbList(options?: any): AxiosPromise<Array<OperatedLimb>> {
+            return localVarFp.getOperatedLimbList(options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * SurgeriesListApi - interface
+ * SurgeryOperatedLimbApi - interface
  * @export
- * @interface SurgeriesListApi
+ * @interface SurgeryOperatedLimbApi
  */
-export interface SurgeriesListApiInterface {
+export interface SurgeryOperatedLimbApiInterface {
     /**
-     * By using surgeonId you get list of surgeries performed by surgeon
-     * @summary Provides surgeries of surgeon
-     * @param {string} surgeonId pass the id of the particular surgeon
+     * Get a list of predefined operated limbs applicable to surgeries
+     * @summary Provides the list of operated limbs associated with surgeries
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApiInterface
+     * @memberof SurgeryOperatedLimbApiInterface
      */
-    getSurgeonSurgeries(surgeonId: string, options?: AxiosRequestConfig): AxiosPromise<Array<SurgeriesListEntry>>;
+    getOperatedLimbList(options?: AxiosRequestConfig): AxiosPromise<Array<OperatedLimb>>;
 
 }
 
 /**
- * SurgeriesListApi - object-oriented interface
+ * SurgeryOperatedLimbApi - object-oriented interface
  * @export
- * @class SurgeriesListApi
+ * @class SurgeryOperatedLimbApi
  * @extends {BaseAPI}
  */
-export class SurgeriesListApi extends BaseAPI implements SurgeriesListApiInterface {
+export class SurgeryOperatedLimbApi extends BaseAPI implements SurgeryOperatedLimbApiInterface {
     /**
-     * By using surgeonId you get list of surgeries performed by surgeon
-     * @summary Provides surgeries of surgeon
-     * @param {string} surgeonId pass the id of the particular surgeon
+     * Get a list of predefined operated limbs applicable to surgeries
+     * @summary Provides the list of operated limbs associated with surgeries
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApi
+     * @memberof SurgeryOperatedLimbApi
      */
-    public getSurgeonSurgeries(surgeonId: string, options?: AxiosRequestConfig) {
-        return SurgeriesListApiFp(this.configuration).getSurgeonSurgeries(surgeonId, options).then((request) => request(this.axios, this.basePath));
+    public getOperatedLimbList(options?: AxiosRequestConfig) {
+        return SurgeryOperatedLimbApiFp(this.configuration).getOperatedLimbList(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
