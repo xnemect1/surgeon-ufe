@@ -285,7 +285,6 @@ components:
           patientId: 74895-ludomir-zlostny
           date: 2024-05-24
           successful: True
-          surgeryDetail:
           surgeryNote: Vsetko prebehlo podla planu
           operatedLimb:
             value: Lava ruka
@@ -295,7 +294,6 @@ components:
           patientId: 74895-vaclav-gyorgi
           date: 2024-05-11
           successful: False
-          surgeryDetail:
           surgeryNote: Stratil 4 prsty na nohe
           operatedLimb:
             value: Prava noha
