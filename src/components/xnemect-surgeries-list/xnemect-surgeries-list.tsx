@@ -60,9 +60,4 @@ export class XnemectSurgeriesList {
       </Host>
     );
   }
-
-  private isoDateToLocale(iso: string) {
-    if (!iso) return '';
-    return new Date(Date.parse(iso)).toLocaleTimeString();
-  }
 }
