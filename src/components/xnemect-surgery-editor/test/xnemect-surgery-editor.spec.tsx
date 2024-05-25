@@ -1,5 +1,5 @@
-import { newSpecPage } from '@stencil/core/testing';
-import { XnemectSurgeryEditor } from '../xnemect-surgery-editor';
+// import { newSpecPage } from '@stencil/core/testing';
+// import { XnemectSurgeryEditor } from '../xnemect-surgery-editor';
 
 describe('xnemect-surgeon-wl-editor', () => {
   it('buttons shall be of different type', async () => {
