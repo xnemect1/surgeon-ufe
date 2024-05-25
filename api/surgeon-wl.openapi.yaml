@@ -1,0 +1,129 @@
+openapi: 3.0.0
+servers:
+  - description: Cluster Endpoint
+    url: /api
+info:
+  description: Surgeons List for Web-In-Cloud system
+  version: '1.0.0'
+  title: Waiting List Api
+  contact:
+    email: tomas.nemec1999@gmail.com
+  license:
+    name: CC BY 4.0
+    url: 'https://creativecommons.org/licenses/by/4.0/'
+tags:
+  - name: surgeriesList
+    description: Surgeries List API
+paths:
+  '/surgeries-list/{surgeonId}/entries':
+    get:
+      tags:
+        - surgeriesList
+      summary: Provides surgeries of surgeon
+      operationId: getSurgeonSurgeries
+      description: By using surgeonId you get list of surgeries performed by surgeon
+      parameters:
+        - in: path
+          name: surgeonId
+          description: pass the id of the particular surgeon
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: value of the surgeries list entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SurgeriesListEntry'
+              examples:
+                response:
+                  $ref: '#/components/examples/SurgeriesListEntriesExample'
+        '404':
+          description: Surgeon with such ID does not exist
+components:
+  schemas:
+    SurgeriesListEntry:
+      type: object
+      required: [id, surgeonId, surgeryDetail]
+      properties:
+        id:
+          type: string
+          example: x321ab3
+          description: Unique id of the entry in this surgeries list
+        patientId:
+          type: string
+          example: 460527-jozef-pucik
+          description: Unique identifier of the patient known to Web-In-Cloud system
+        surgeryDetail:
+          $ref: '#/components/schemas/surgeryDetail'
+      example:
+        $ref: '#/components/examples/SurgeriesListEntriesExample'
+    surgeryDetail:
+      description: 'Detail about surgery'
+      required: [date, successful, operatedLimb, surgeryNote]
+      properties:
+        date:
+          type: string
+          example: Teploty
+        successful:
+          type: boolean
+          example: True
+        operatedLimb:
+          type: string
+          enum:
+            - left hand
+            - right hand
+            - left leg
+            - right leg
+            - head
+            - body
+          example: left hand
+        surgeryNote:
+          type: string
+          example: Surgery was successful without any complication
+      example:
+        $ref: '#/components/examples/surgeryDetailExample'
+  examples:
+    SurgeriesListEntryExample:
+      summary: Ľudomír Zlostný waiting
+      description: |
+        Entry represents a patient waiting in the ambulance prep room with
+        defined symptoms
+      value:
+        id: x321ab3
+        patientId: 74895-ludomir-zlostny
+        surgeryDetail:
+          date: 2024-05-24
+          successful: True
+          operatedLimb: left hand
+          surgeryNote: Vsetko prebehlo podla planu
+    surgeryDetailExample:
+      summary: surgery details
+      description: list of few symptoms that can be chosen by patients
+      value:
+        date: 2024-05-21
+        successful: False
+        operatedLimb: right hand
+        surgeryNote: Pinky was lost during operation.
+    SurgeriesListEntriesExample:
+      summary: List of surgeries performed by surgeon
+      description: |
+        Example of two surgeries
+      value:
+        - id: x321ab3
+          patientId: 74895-ludomir-zlostny
+          surgeryDetail:
+            date: 2024-05-24
+            successful: True
+            operatedLimb: left hand
+            surgeryNote: Vsetko prebehlo podla planu
+        - id: x456cd3
+          patientId: 74895-vaclav-gyorgi
+          surgeryDetail:
+            date: 2024-02-22
+            successful: False
+            operatedLimb: head
+            surgeryNote: Eye was damaged with scalpel

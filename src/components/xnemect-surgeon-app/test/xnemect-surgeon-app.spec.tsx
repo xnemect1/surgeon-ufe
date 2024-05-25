@@ -10,17 +10,17 @@ describe('xnemect-surgeon-app', () => {
     });
     page.win.navigation = new EventTarget();
     const child = await page.root.shadowRoot.firstElementChild;
-    expect(child.tagName.toLocaleLowerCase()).toEqual('xnemect-ambulance-wl-editor');
+    expect(child.tagName.toLocaleLowerCase()).toEqual('xnemect-surgeon-editor');
   });
 
   it('renders list', async () => {
     const page = await newSpecPage({
       url: `http://localhost/surgeries/`,
       components: [XnemectSurgeonApp],
-      html: `<xnemect-surgeon-app base-path="/ambulance-wl/"></xnemect-surgeon-app>`,
+      html: `<xnemect-surgeon-app base-path="/surgeon-wl/"></xnemect-surgeon-app>`,
     });
     page.win.navigation = new EventTarget();
     const child = await page.root.shadowRoot.firstElementChild;
-    expect(child.tagName.toLocaleLowerCase()).toEqual('xnemect-ambulance-wl-list');
+    expect(child.tagName.toLocaleLowerCase()).toEqual('xnemect-surgeries-list');
   });
 });

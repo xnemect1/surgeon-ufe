@@ -7,9 +7,15 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface XnemectSurgeonApp {
+        "apiBase": string;
         "basePath": string;
+        "surgeonId": string;
     }
     interface XnemectSurgeonList {
+    }
+    interface XnemectSurgeriesList {
+        "apiBase": string;
+        "surgeonId": string;
     }
     interface XnemectSurgeryEditor {
         "entryId": string;
@@ -18,6 +24,10 @@ export namespace Components {
 export interface XnemectSurgeonListCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLXnemectSurgeonListElement;
+}
+export interface XnemectSurgeriesListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLXnemectSurgeriesListElement;
 }
 export interface XnemectSurgeryEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -47,6 +57,23 @@ declare global {
         prototype: HTMLXnemectSurgeonListElement;
         new (): HTMLXnemectSurgeonListElement;
     };
+    interface HTMLXnemectSurgeriesListElementEventMap {
+        "entry-clicked": string;
+    }
+    interface HTMLXnemectSurgeriesListElement extends Components.XnemectSurgeriesList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLXnemectSurgeriesListElementEventMap>(type: K, listener: (this: HTMLXnemectSurgeriesListElement, ev: XnemectSurgeriesListCustomEvent<HTMLXnemectSurgeriesListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLXnemectSurgeriesListElementEventMap>(type: K, listener: (this: HTMLXnemectSurgeriesListElement, ev: XnemectSurgeriesListCustomEvent<HTMLXnemectSurgeriesListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLXnemectSurgeriesListElement: {
+        prototype: HTMLXnemectSurgeriesListElement;
+        new (): HTMLXnemectSurgeriesListElement;
+    };
     interface HTMLXnemectSurgeryEditorElementEventMap {
         "editor-closed": string;
     }
@@ -67,15 +94,23 @@ declare global {
     interface HTMLElementTagNameMap {
         "xnemect-surgeon-app": HTMLXnemectSurgeonAppElement;
         "xnemect-surgeon-list": HTMLXnemectSurgeonListElement;
+        "xnemect-surgeries-list": HTMLXnemectSurgeriesListElement;
         "xnemect-surgery-editor": HTMLXnemectSurgeryEditorElement;
     }
 }
 declare namespace LocalJSX {
     interface XnemectSurgeonApp {
+        "apiBase"?: string;
         "basePath"?: string;
+        "surgeonId"?: string;
     }
     interface XnemectSurgeonList {
         "onEntry-clicked"?: (event: XnemectSurgeonListCustomEvent<string>) => void;
+    }
+    interface XnemectSurgeriesList {
+        "apiBase"?: string;
+        "onEntry-clicked"?: (event: XnemectSurgeriesListCustomEvent<string>) => void;
+        "surgeonId"?: string;
     }
     interface XnemectSurgeryEditor {
         "entryId"?: string;
@@ -84,6 +119,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "xnemect-surgeon-app": XnemectSurgeonApp;
         "xnemect-surgeon-list": XnemectSurgeonList;
+        "xnemect-surgeries-list": XnemectSurgeriesList;
         "xnemect-surgery-editor": XnemectSurgeryEditor;
     }
 }
@@ -93,6 +129,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "xnemect-surgeon-app": LocalJSX.XnemectSurgeonApp & JSXBase.HTMLAttributes<HTMLXnemectSurgeonAppElement>;
             "xnemect-surgeon-list": LocalJSX.XnemectSurgeonList & JSXBase.HTMLAttributes<HTMLXnemectSurgeonListElement>;
+            "xnemect-surgeries-list": LocalJSX.XnemectSurgeriesList & JSXBase.HTMLAttributes<HTMLXnemectSurgeriesListElement>;
             "xnemect-surgery-editor": LocalJSX.XnemectSurgeryEditor & JSXBase.HTMLAttributes<HTMLXnemectSurgeryEditorElement>;
         }
     }

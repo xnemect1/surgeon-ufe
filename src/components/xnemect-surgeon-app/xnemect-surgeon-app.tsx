@@ -14,6 +14,8 @@ export class XnemectSurgeonApp {
   @State() private relativePath = '';
 
   @Prop() basePath: string = '';
+  @Prop() apiBase: string;
+  @Prop() surgeonId: string;
 
   componentWillLoad() {
     const baseUri = new URL(this.basePath, document.baseURI || '/').pathname;
@@ -54,9 +56,13 @@ export class XnemectSurgeonApp {
     return (
       <Host>
         {element === 'editor' ? (
-          <xnemect-surgery-editor entry-id={entryId} oneditor-closed={() => navigate('./list')}></xnemect-surgery-editor>
+          <xnemect-surgeon-editor entry-id={entryId} oneditor-closed={() => navigate('./list')}></xnemect-surgeon-editor>
         ) : (
-          <xnemect-surgeon-list onentry-clicked={(ev: CustomEvent<string>) => navigate('./entry/' + ev.detail)}></xnemect-surgeon-list>
+          <xnemect-surgeries-list
+            surgeon-id={this.surgeonId}
+            api-base={this.apiBase}
+            onentry-clicked={(ev: CustomEvent<string>) => navigate('./entry/' + ev.detail)}
+          ></xnemect-surgeries-list>
         )}
       </Host>
     );
