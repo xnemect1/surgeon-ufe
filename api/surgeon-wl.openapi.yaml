@@ -16,6 +16,8 @@ tags:
     description: Surgeries List API
   - name: oepratedLimbs
     description: specific locations that can be operated
+  - name: surgeons
+    description: Surgeons details
 paths:
   '/surgeries-list/{surgeonId}/entries':
     get:
@@ -128,7 +130,7 @@ paths:
       parameters:
         - in: path
           name: surgeonId
-          description: pass the id of the particular ambulance
+          description: pass the id of the particular surgeon
           required: true
           schema:
             type: string
@@ -209,6 +211,77 @@ paths:
               examples:
                 response:
                   $ref: '#/components/examples/OperatedLimbsListExample'
+  '/surgeon':
+    post:
+      tags:
+        - surgeons
+      summary: Saves new surgeon
+      operationId: createSurgeon
+      description: Use this method to initialize new surgeon in the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Surgeon'
+            examples:
+              request-sample:
+                $ref: '#/components/examples/SurgeonExample'
+        description: surgeon details to store
+        required: true
+      responses:
+        '200':
+          description: >-
+            Value of stored surgeon
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Surgeon'
+              examples:
+                updated-response:
+                  $ref: '#/components/examples/SurgeonExample'
+        '400':
+          description: Missing mandatory properties of input object.
+        '409':
+          description: Entry with the specified id already exists
+    get:
+      tags:
+        - surgeons
+      summary: Retrieves all surgeons
+      operationId: getAllSurgeons
+      description: Use this method to get a list of all surgeons registered in the system
+      responses:
+        '200':
+          description: A list of surgeons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Surgeon'
+              examples:
+                surgeon-list:
+                  $ref: '#/components/examples/SurgeonListExample'
+        '500':
+          description: Server error
+  '/surgeon/{surgeonId}':
+    delete:
+      tags:
+        - surgeons
+      summary: Deletes specific surgeon
+      operationId: deleteSurgeon
+      description: Use this method to delete the specific surgeon from the system.
+      parameters:
+        - in: path
+          name: surgeonId
+          description: pass the id of the particular surgeon
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Item deleted
+        '404':
+          description: Surgeon with such ID does not exist
 components:
   schemas:
     SurgeryEntry:
@@ -253,6 +326,25 @@ components:
           example: Left hand
       example:
         $ref: '#/components/examples/OperatedLimbExample'
+    Surgeon:
+      type: object
+      required: ['id', 'name']
+      properties:
+        id:
+          type: string
+          example: dentist-warenova
+          description: Unique identifier of the ambulance
+        name:
+          type: string
+          example: Mudr. Andrej Poljak
+          description: Human readable name of the surgeon
+        surgeries:
+          type: array
+          description: List of surgeries performed by the surgeon
+          items:
+            $ref: '#/components/schemas/SurgeryEntry'
+      example:
+        $ref: '#/components/examples/SurgeonExample'
   examples:
     SurgeryEntryExample:
       summary: Ľudomír Zlostný waiting
@@ -285,6 +377,7 @@ components:
           patientId: 74895-ludomir-zlostny
           date: 2024-05-24
           successful: True
+          surgeryDetail:
           surgeryNote: Vsetko prebehlo podla planu
           operatedLimb:
             value: Lava ruka
@@ -294,6 +387,7 @@ components:
           patientId: 74895-vaclav-gyorgi
           date: 2024-05-11
           successful: False
+          surgeryDetail:
           surgeryNote: Stratil 4 prsty na nohe
           operatedLimb:
             value: Prava noha
@@ -315,3 +409,76 @@ components:
           code: Left leg
         - value: Prava noha
           code: Right leg
+    SurgeonExample:
+      summary: Sample GP surgeon
+      description: |
+        Example of GP surgeon with surgeries
+      value:
+        id: xpoljako
+        name: Mudr. Andrej Poljak
+        surgeriesList:
+          - id: x321ab3
+            surgeonId: xpoljako
+            patientId: 74895-ludomir-zlostny
+            date: 2024-05-24
+            successful: True
+            surgeryNote: Vsetko prebehlo podla planu
+            operatedLimb:
+              value: Lava ruka
+              code: Left hand
+          - id: x456cd3
+            surgeonId: xpoljako
+            patientId: 74895-vaclav-gyorgi
+            date: 2024-05-11
+            successful: False
+            surgeryNote: Stratil 4 prsty na nohe
+            operatedLimb:
+              value: Prava noha
+              code: Right leg
+    SurgeonListExample:
+      summary: Sample GP surgeons
+      description: |
+        Example of all surgeons with surgeries
+      value:
+        - id: 1
+          name: Mudr. Andrej Poljak
+          surgeriesList:
+            - id: 1
+              surgeonId: 1
+              patientId: 74895-ludomir-zlostny
+              date: 2024-05-24
+              successful: True
+              surgeryNote: Vsetko prebehlo podla planu
+              operatedLimb:
+                value: Lava ruka
+                code: Left hand
+            - id: 2
+              surgeonId: 1
+              patientId: 74895-vaclav-gyorgi
+              date: 2024-05-11
+              successful: False
+              surgeryNote: Stratil 4 prsty na nohe
+              operatedLimb:
+                value: Prava noha
+                code: Right leg
+        - id: 2
+          name: Mudr. Hipko
+          surgeriesList:
+            - id: 3
+              surgeonId: 2
+              patientId: 74895-ludomir-zlostny
+              date: 2024-05-24
+              successful: True
+              surgeryNote: Nic sa nestalo podla planu
+              operatedLimb:
+                value: Prava ruka
+                code: Right hand
+            - id: 4
+              surgeonId: 2
+              patientId: 74895-vaclav-gyorgi
+              date: 2024-05-11
+              successful: False
+              surgeryNote: Stratil 4 prsty na nohe
+              operatedLimb:
+                value: Prava noha
+                code: Right leg

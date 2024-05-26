@@ -12,18 +12,21 @@ export class XnemectSurgeriesList {
   @Prop() surgeonId: string;
   @State() errorMessage: string;
 
+  @Event({ eventName: 'editor-closed' }) surgeriesClosed: EventEmitter<string>;
+
   surgeries: SurgeryEntry[];
 
   private async getSurgeonSurgeriesAsync(): Promise<SurgeryEntry[]> {
     try {
+      console.log('SURGERIES COMPONENT');
       const response = await SurgeriesListApiFactory(undefined, this.apiBase).getSurgeryEntries(this.surgeonId);
       if (response.status < 299) {
         return response.data;
       } else {
-        this.errorMessage = `Cannot retrieve list of waiting patients: ${response.statusText}`;
+        this.errorMessage = `Cannot retrieve list of surgeries of surgeon ${this.surgeonId}: ${response.statusText}`;
       }
     } catch (err: any) {
-      this.errorMessage = `Cannot retrieve list of waiting patients: ${err.message || 'unknown'}`;
+      this.errorMessage = `Cannot retrieve list of surgeries of surgeon ${this.surgeonId}: ${err.message || 'unknown'}`;
     }
     return [];
   }
@@ -54,6 +57,9 @@ export class XnemectSurgeriesList {
             ))}
           </md-list>
         )}
+        <md-outlined-button id="cancel" onClick={() => this.surgeriesClosed.emit('cancel')}>
+          Zrušiť
+        </md-outlined-button>
         <md-filled-icon-button class="add-button" onclick={() => this.entryClicked.emit('@new')}>
           <md-icon>add</md-icon>
         </md-filled-icon-button>

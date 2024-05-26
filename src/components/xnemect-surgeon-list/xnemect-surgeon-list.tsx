@@ -1,4 +1,5 @@
-import { Component, Event, EventEmitter, Host, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Surgeon, SurgeonsApiFactory } from '../../api/surgeon-wl';
 
 @Component({
   tag: 'xnemect-surgeon-list',
@@ -7,59 +8,50 @@ import { Component, Event, EventEmitter, Host, h } from '@stencil/core';
 })
 export class XnemectSurgeonList {
   @Event({ eventName: 'entry-clicked' }) entryClicked: EventEmitter<string>;
-  waitingPatients: any[];
+  @Prop() apiBase: string;
+  @State() errorMessage: string;
 
-  private async getWaitingPatientsAsync() {
-    return await Promise.resolve([
-      {
-        name: 'Jan Vrba',
-        patientId: '10001',
-        since: new Date(Date.now() - 10 * 60).toISOString(),
-        estimatedStart: new Date(Date.now() + 65 * 60).toISOString(),
-        estimatedDurationMinutes: 15,
-        condition: 'Kontrola',
-      },
-      {
-        name: 'Bc. Julius Varga',
-        patientId: '10096',
-        since: new Date(Date.now() - 30 * 60).toISOString(),
-        estimatedStart: new Date(Date.now() + 30 * 60).toISOString(),
-        estimatedDurationMinutes: 20,
-        condition: 'Teploty',
-      },
-      {
-        name: 'MuDr. Andrej Poljak',
-        patientId: '10028',
-        since: new Date(Date.now() - 72 * 60).toISOString(),
-        estimatedStart: new Date(Date.now() + 5 * 60).toISOString(),
-        estimatedDurationMinutes: 15,
-        condition: 'Bolesti hrdla',
-      },
-    ]);
+  currentSurgeons: Surgeon[];
+
+  private async getSurgeonsAsync() {
+    try {
+      const response = await SurgeonsApiFactory(undefined, this.apiBase).getAllSurgeons();
+      if (response.status < 299) {
+        return response.data;
+      } else {
+        this.errorMessage = `Cannot retrieve list of surgeons: ${response.statusText}`;
+      }
+    } catch (err: any) {
+      this.errorMessage = `Cannot retrieve list of surgeons: ${err.message || 'unknown'}`;
+    }
+    return [];
   }
 
   async componentWillLoad() {
-    this.waitingPatients = await this.getWaitingPatientsAsync();
+    this.currentSurgeons = await this.getSurgeonsAsync();
   }
 
   render() {
     return (
       <Host>
-        <md-list>
-          {this.waitingPatients.map((patient, index) => (
-            <md-list-item onClick={() => this.entryClicked.emit(index.toString())}>
-              <div slot="headline">{patient.name}</div>
-              <div slot="supporting-text">{'Predpokladaný vstup: ' + this.isoDateToLocale(patient.estimatedStart)}</div>
+        <h2>Chirurgovia:</h2>
+        <md-list className="list">
+          {this.currentSurgeons.map((surgeon, index) => (
+            <md-list-item
+              key={index}
+              className="list-item"
+              onClick={() => {
+                console.log('Emitting surgeon ID:', surgeon.id); // Debug log
+                this.entryClicked.emit(surgeon.id);
+              }}
+            >
               <md-icon slot="start">person</md-icon>
+              <div slot="headline">{surgeon.name}</div>
+              <div slot="supporting-text">{'ID: ' + surgeon.id}</div>
             </md-list-item>
           ))}
         </md-list>
       </Host>
     );
-  }
-
-  private isoDateToLocale(iso: string) {
-    if (!iso) return '';
-    return new Date(Date.parse(iso)).toLocaleTimeString();
   }
 }

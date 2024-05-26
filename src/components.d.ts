@@ -12,6 +12,7 @@ export namespace Components {
         "surgeonId": string;
     }
     interface XnemectSurgeonList {
+        "apiBase": string;
     }
     interface XnemectSurgeriesList {
         "apiBase": string;
@@ -61,6 +62,7 @@ declare global {
     };
     interface HTMLXnemectSurgeriesListElementEventMap {
         "entry-clicked": string;
+        "editor-closed": string;
     }
     interface HTMLXnemectSurgeriesListElement extends Components.XnemectSurgeriesList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLXnemectSurgeriesListElementEventMap>(type: K, listener: (this: HTMLXnemectSurgeriesListElement, ev: XnemectSurgeriesListCustomEvent<HTMLXnemectSurgeriesListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -107,10 +109,12 @@ declare namespace LocalJSX {
         "surgeonId"?: string;
     }
     interface XnemectSurgeonList {
+        "apiBase"?: string;
         "onEntry-clicked"?: (event: XnemectSurgeonListCustomEvent<string>) => void;
     }
     interface XnemectSurgeriesList {
         "apiBase"?: string;
+        "onEditor-closed"?: (event: XnemectSurgeriesListCustomEvent<string>) => void;
         "onEntry-clicked"?: (event: XnemectSurgeriesListCustomEvent<string>) => void;
         "surgeonId"?: string;
     }

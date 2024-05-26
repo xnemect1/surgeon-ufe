@@ -9,7 +9,7 @@ describe('xnemect-surgeon-list', () => {
     });
 
     const wlList = page.rootInstance as XnemectSurgeonList;
-    const expectedPatients = wlList?.waitingPatients?.length;
+    const expectedPatients = wlList?.currentSurgeons?.length;
 
     const items = page.root.shadowRoot.querySelectorAll('md-list-item');
     expect(items.length).toEqual(expectedPatients);
