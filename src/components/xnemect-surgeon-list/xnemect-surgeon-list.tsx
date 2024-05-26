@@ -34,7 +34,7 @@ export class XnemectSurgeonList {
   render() {
     return (
       <Host>
-        <h2>Chirurgovia:</h2>
+        <h2>Zoznam chirurgov</h2>
         <md-list className="list">
           {this.currentSurgeons.map((surgeon, index) => (
             <md-list-item

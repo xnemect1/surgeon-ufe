@@ -286,22 +286,19 @@ components:
   schemas:
     SurgeryEntry:
       type: object
-      required: [id, surgeonId, patientId, date, successful, operatedLimb]
+      required: [id, patientId, date, successful, operatedLimb]
       properties:
         id:
           type: string
           example: x321ab3
           description: Unique id of the entry in this surgeries list
-        surgeonId:
-          type: string
-          example: 460527-Jano-Vrba
-          description: Unique identifier of the surgeon known to Web-In-Cloud system
         patientId:
           type: string
           example: 460527-jozef-pucik
           description: Unique identifier of the patient known to Web-In-Cloud system
         date:
           type: string
+          format: date
           example: 24-05-2024
         successful:
           type: boolean
@@ -373,7 +370,6 @@ components:
         Example of two surgeries
       value:
         - id: x321ab3
-          surgeonId: 76554-Jano-Vrba
           patientId: 74895-ludomir-zlostny
           date: 2024-05-24
           successful: True
@@ -383,7 +379,6 @@ components:
             value: Lava ruka
             code: Left hand
         - id: x456cd3
-          surgeonId: 76554-Jano-Vrba
           patientId: 74895-vaclav-gyorgi
           date: 2024-05-11
           successful: False
@@ -418,7 +413,6 @@ components:
         name: Mudr. Andrej Poljak
         surgeriesList:
           - id: x321ab3
-            surgeonId: xpoljako
             patientId: 74895-ludomir-zlostny
             date: 2024-05-24
             successful: True
@@ -427,7 +421,6 @@ components:
               value: Lava ruka
               code: Left hand
           - id: x456cd3
-            surgeonId: xpoljako
             patientId: 74895-vaclav-gyorgi
             date: 2024-05-11
             successful: False
@@ -444,7 +437,6 @@ components:
           name: Mudr. Andrej Poljak
           surgeriesList:
             - id: 1
-              surgeonId: 1
               patientId: 74895-ludomir-zlostny
               date: 2024-05-24
               successful: True
@@ -453,7 +445,6 @@ components:
                 value: Lava ruka
                 code: Left hand
             - id: 2
-              surgeonId: 1
               patientId: 74895-vaclav-gyorgi
               date: 2024-05-11
               successful: False
@@ -465,7 +456,6 @@ components:
           name: Mudr. Hipko
           surgeriesList:
             - id: 3
-              surgeonId: 2
               patientId: 74895-ludomir-zlostny
               date: 2024-05-24
               successful: True
@@ -474,7 +464,6 @@ components:
                 value: Prava ruka
                 code: Right hand
             - id: 4
-              surgeonId: 2
               patientId: 74895-vaclav-gyorgi
               date: 2024-05-11
               successful: False

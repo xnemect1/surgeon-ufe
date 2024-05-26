@@ -17,6 +17,7 @@ export namespace Components {
     interface XnemectSurgeriesList {
         "apiBase": string;
         "surgeonId": string;
+        "surgeonName": string;
     }
     interface XnemectSurgeryEditor {
         "apiBase": string;
@@ -117,6 +118,7 @@ declare namespace LocalJSX {
         "onEditor-closed"?: (event: XnemectSurgeriesListCustomEvent<string>) => void;
         "onEntry-clicked"?: (event: XnemectSurgeriesListCustomEvent<string>) => void;
         "surgeonId"?: string;
+        "surgeonName"?: string;
     }
     interface XnemectSurgeryEditor {
         "apiBase"?: string;

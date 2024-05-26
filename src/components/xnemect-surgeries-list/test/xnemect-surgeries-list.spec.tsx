@@ -9,7 +9,6 @@ describe('xnemect-surgeries-list', () => {
     {
       id: 'entry-1',
       patientId: 'p-1',
-      surgeonId: 's-1',
       date: '2024-02-10',
       successful: true,
       operatedLimb: {
@@ -20,7 +19,6 @@ describe('xnemect-surgeries-list', () => {
     {
       id: 'entry-2',
       patientId: 'p-2',
-      surgeonId: 's-1',
       date: '2024-03-15',
       successful: false,
       operatedLimb: {

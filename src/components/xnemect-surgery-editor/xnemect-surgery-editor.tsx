@@ -24,7 +24,6 @@ export class XnemectSurgeryEditor {
       this.isValid = false;
       this.entry = {
         id: '@new',
-        surgeonId: '',
         patientId: '',
         date: '',
         successful: true,
@@ -90,8 +89,13 @@ export class XnemectSurgeryEditor {
     }
     return (
       <Host>
+        <div>
+          <h2>{this.entryId === '@new' ? 'Pridaj novú operáciu' : 'Uprav existujúcu operáciu'}</h2>
+        </div>
+
         <form ref={el => (this.formElement = el)}>
           <md-filled-text-field
+            type="date"
             label="Dátum"
             required
             value={this.entry?.date}
@@ -102,18 +106,21 @@ export class XnemectSurgeryEditor {
             }}
           ></md-filled-text-field>
 
-          <md-checkbox
-            id="successfulCheckbox" // Unique ID for the checkbox
-            required
-            checked={this.entry?.successful}
-            onInput={(ev: InputEvent) => {
-              const checkbox = ev.target as HTMLInputElement;
-              if (this.entry) {
-                this.entry.successful = checkbox.checked; // Directly use the 'checked' property
-              }
-            }}
-          ></md-checkbox>
-          <label htmlFor="successfulCheckbox">Úspešnosť</label>
+          <div class="in-row">
+            <md-checkbox
+              id="successfulCheckbox" // Unique ID for the checkbox
+              checked={this.entry?.successful}
+              onInput={(ev: InputEvent) => {
+                const checkbox = ev.target as HTMLInputElement;
+                if (this.entry) {
+                  this.entry.successful = checkbox.checked; // Directly use the 'checked' property
+                }
+              }}
+            ></md-checkbox>
+            <label class="label1" htmlFor="successfulCheckbox">
+              Operácia prebehla úspešne
+            </label>
+          </div>
 
           {this.renderConditions()}
           <md-filled-text-field
@@ -127,7 +134,6 @@ export class XnemectSurgeryEditor {
           ></md-filled-text-field>
         </form>
 
-        <md-divider inset></md-divider>
         <div class="actions">
           <md-filled-tonal-button id="delete" disabled={!this.entry || this.entry?.id === '@new'} onClick={() => this.deleteEntry()}>
             <md-icon slot="icon">delete</md-icon>

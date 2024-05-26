@@ -80,12 +80,6 @@ export interface SurgeryEntry {
      */
     'id': string;
     /**
-     * Unique identifier of the surgeon known to Web-In-Cloud system
-     * @type {string}
-     * @memberof SurgeryEntry
-     */
-    'surgeonId': string;
-    /**
      * Unique identifier of the patient known to Web-In-Cloud system
      * @type {string}
      * @memberof SurgeryEntry

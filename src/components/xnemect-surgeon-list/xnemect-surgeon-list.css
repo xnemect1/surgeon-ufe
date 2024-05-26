@@ -1,8 +1,52 @@
 :host {
   display: block;
 }
+
 h2 {
-  text-align: left;
+  text-align: center;
   margin-bottom: 20px;
   color: #333;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+md-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  background: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+md-list-item {
+  cursor: pointer;
+  background-color: #8d8c8c;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+md-list-item:hover {
+  background-color: #f9b4b4;
+}
+
+md-icon {
+  margin-right: 10px;
+  color: #666;
+  font-size: 24px;
+}
+
+div[slot='headline'] {
+  font-size: 18px;
+  color: #333;
+  font-weight: 500;
+}
+
+div[slot='supporting-text'] {
+  font-size: 14px;
+  color: #000000;
 }
