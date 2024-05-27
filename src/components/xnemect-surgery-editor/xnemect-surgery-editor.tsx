@@ -24,7 +24,7 @@ export class XnemectSurgeryEditor {
       this.isValid = false;
       this.entry = {
         id: '@new',
-        patientId: '',
+        patientId: this.surgeonId,
         date: '',
         successful: true,
         surgeryNote: '',
