@@ -13,8 +13,6 @@ export class XnemectSurgeriesList {
   @Prop() surgeonName: string;
   @State() errorMessage: string;
 
-  @Event({ eventName: 'editor-closed' }) surgeriesClosed: EventEmitter<string>;
-
   surgeries: SurgeryEntry[];
 
   private async getSurgeonSurgeriesAsync(): Promise<SurgeryEntry[]> {
@@ -63,9 +61,6 @@ export class XnemectSurgeriesList {
           </div>
         )}
         <div class="buttons-space">
-          <md-outlined-button class="buttons" id="cancel" onClick={() => this.surgeriesClosed.emit('cancel')}>
-            Zrušiť
-          </md-outlined-button>
           <md-outlined-button class="buttons" onclick={() => this.entryClicked.emit('@new')}>
             Pridať novú operáciu
           </md-outlined-button>
