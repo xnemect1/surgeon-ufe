@@ -109,7 +109,7 @@ export class XnemectSurgeryEditor {
           <div class="in-row">
             <md-checkbox
               id="successfulCheckbox" // Unique ID for the checkbox
-              checked={this.entry?.successful}
+              checked={this.entry ? this.entry.successful : false}
               onInput={(ev: InputEvent) => {
                 const checkbox = ev.target as HTMLInputElement;
                 if (this.entry) {

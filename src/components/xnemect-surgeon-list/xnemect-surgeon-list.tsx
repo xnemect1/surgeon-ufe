@@ -39,9 +39,8 @@ export class XnemectSurgeonList {
         {this.errorMessage && <div>Error: {this.errorMessage}</div>}
         <md-list className="list">
           {this.currentSurgeons.length > 0 ? (
-            this.currentSurgeons.map((surgeon, index) => (
+            this.currentSurgeons.map(surgeon => (
               <md-list-item
-                key={index}
                 className="list-item"
                 onClick={() => {
                   console.log('Emitting surgeon ID:', surgeon.id);
