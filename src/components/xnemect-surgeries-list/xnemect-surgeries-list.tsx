@@ -54,7 +54,7 @@ export class XnemectSurgeriesList {
                   }}
                 >
                   <div slot="headline">{'ID: ' + surgery.id}</div>
-                  <div slot="supporting-text">{'Dátum operácie: ' + surgery.date}</div>
+                  <div slot="supporting-text">{'Dátum operácie: ' + this.isoDateToLocale(surgery.date)}</div>
                   <div slot="supporting-text">{'Operovaná končatina: ' + surgery.operatedLimb.value}</div>
                   <md-icon slot="start">local_hospital</md-icon>
                 </md-list-item>
@@ -72,5 +72,10 @@ export class XnemectSurgeriesList {
         </div>
       </Host>
     );
+  }
+
+  private isoDateToLocale(iso: string) {
+    if (!iso) return '';
+    return new Date(Date.parse(iso)).toLocaleDateString();
   }
 }

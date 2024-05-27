@@ -98,10 +98,10 @@ export class XnemectSurgeryEditor {
             type="date"
             label="Dátum"
             required
-            value={this.entry?.date}
+            valueAsDate={new Date(this.entry?.date)}
             oninput={(ev: InputEvent) => {
               if (this.entry) {
-                this.entry.date = this.handleInputEvent(ev);
+                this.entry.date = this.isoDateToLocale(this.handleInputEvent(ev));
               }
             }}
           ></md-filled-text-field>
@@ -150,6 +150,11 @@ export class XnemectSurgeryEditor {
         </div>
       </Host>
     );
+  }
+
+  private isoDateToLocale(iso: string) {
+    if (!iso) return '';
+    return new Date(Date.parse(iso)).toLocaleDateString();
   }
 
   private renderConditions() {
