@@ -13,7 +13,7 @@ export class XnemectSurgeonList {
 
   currentSurgeons: Surgeon[];
 
-  private async getSurgeonsAsync() {
+  private async getSurgeonsAsync(): Promise<Surgeon[]> {
     try {
       const response = await SurgeonsApiFactory(undefined, this.apiBase).getAllSurgeons();
       if (response.status < 299) {
@@ -32,24 +32,30 @@ export class XnemectSurgeonList {
   }
 
   render() {
+    console.log('At initialization => currentSurgeons: ', this.currentSurgeons);
     return (
       <Host>
         <h2>Zoznam chirurgov</h2>
+        {this.errorMessage && <div>Error: {this.errorMessage}</div>}
         <md-list className="list">
-          {this.currentSurgeons.map((surgeon, index) => (
-            <md-list-item
-              key={index}
-              className="list-item"
-              onClick={() => {
-                console.log('Emitting surgeon ID:', surgeon.id); // Debug log
-                this.entryClicked.emit(surgeon.id);
-              }}
-            >
-              <md-icon slot="start">person</md-icon>
-              <div slot="headline">{surgeon.name}</div>
-              <div slot="supporting-text">{'ID: ' + surgeon.id}</div>
-            </md-list-item>
-          ))}
+          {this.currentSurgeons.length > 0 ? (
+            this.currentSurgeons.map((surgeon, index) => (
+              <md-list-item
+                key={index}
+                className="list-item"
+                onClick={() => {
+                  console.log('Emitting surgeon ID:', surgeon.id);
+                  this.entryClicked.emit(surgeon.id);
+                }}
+              >
+                <md-icon slot="start">person</md-icon>
+                <div slot="headline">{surgeon.name}</div>
+                <div slot="supporting-text">{'ID: ' + surgeon.id}</div>
+              </md-list-item>
+            ))
+          ) : (
+            <div>No surgeons found.</div>
+          )}
         </md-list>
       </Host>
     );
