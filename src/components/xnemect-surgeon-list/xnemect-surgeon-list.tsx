@@ -43,7 +43,7 @@ export class XnemectSurgeonList {
               <md-list-item
                 className="list-item"
                 onClick={() => {
-                  console.log('Emitting surgeon ID:', surgeon.id);
+                  console.log('***********\nSurgeon was chosen with ID:', surgeon.id, '\n**********');
                   this.entryClicked.emit(surgeon.id);
                 }}
               >

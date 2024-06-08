@@ -383,10 +383,10 @@ export class SurgeonsApi extends BaseAPI implements SurgeonsApiInterface {
 
 
 /**
- * SurgeriesListApi - axios parameter creator
+ * SurgeriesApi - axios parameter creator
  * @export
  */
-export const SurgeriesListApiAxiosParamCreator = function (configuration?: Configuration) {
+export const SurgeriesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * Use this method to store new entry into the surgeries list.
@@ -586,11 +586,11 @@ export const SurgeriesListApiAxiosParamCreator = function (configuration?: Confi
 };
 
 /**
- * SurgeriesListApi - functional programming interface
+ * SurgeriesApi - functional programming interface
  * @export
  */
-export const SurgeriesListApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = SurgeriesListApiAxiosParamCreator(configuration)
+export const SurgeriesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SurgeriesApiAxiosParamCreator(configuration)
     return {
         /**
          * Use this method to store new entry into the surgeries list.
@@ -656,11 +656,11 @@ export const SurgeriesListApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * SurgeriesListApi - factory interface
+ * SurgeriesApi - factory interface
  * @export
  */
-export const SurgeriesListApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = SurgeriesListApiFp(configuration)
+export const SurgeriesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SurgeriesApiFp(configuration)
     return {
         /**
          * Use this method to store new entry into the surgeries list.
@@ -721,11 +721,11 @@ export const SurgeriesListApiFactory = function (configuration?: Configuration, 
 };
 
 /**
- * SurgeriesListApi - interface
+ * SurgeriesApi - interface
  * @export
- * @interface SurgeriesListApi
+ * @interface SurgeriesApi
  */
-export interface SurgeriesListApiInterface {
+export interface SurgeriesApiInterface {
     /**
      * Use this method to store new entry into the surgeries list.
      * @summary Saves new entry into surgeries list
@@ -733,7 +733,7 @@ export interface SurgeriesListApiInterface {
      * @param {SurgeryEntry} surgeryEntry Surgery entry to store
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApiInterface
+     * @memberof SurgeriesApiInterface
      */
     createSurgeryEntry(surgeonId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig): AxiosPromise<SurgeryEntry>;
 
@@ -744,7 +744,7 @@ export interface SurgeriesListApiInterface {
      * @param {string} entryId pass the id of the particular entry in the waiting list
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApiInterface
+     * @memberof SurgeriesApiInterface
      */
     deleteSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig): AxiosPromise<void>;
 
@@ -754,7 +754,7 @@ export interface SurgeriesListApiInterface {
      * @param {string} surgeonId pass the id of the particular surgeon
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApiInterface
+     * @memberof SurgeriesApiInterface
      */
     getSurgeryEntries(surgeonId: string, options?: AxiosRequestConfig): AxiosPromise<Array<SurgeryEntry>>;
 
@@ -765,7 +765,7 @@ export interface SurgeriesListApiInterface {
      * @param {string} entryId pass the id of the particular entry in the waiting list
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApiInterface
+     * @memberof SurgeriesApiInterface
      */
     getSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig): AxiosPromise<SurgeryEntry>;
 
@@ -777,19 +777,19 @@ export interface SurgeriesListApiInterface {
      * @param {SurgeryEntry} surgeryEntry Waiting list entry to update
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApiInterface
+     * @memberof SurgeriesApiInterface
      */
     updateSurgeryEntry(surgeonId: string, entryId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig): AxiosPromise<SurgeryEntry>;
 
 }
 
 /**
- * SurgeriesListApi - object-oriented interface
+ * SurgeriesApi - object-oriented interface
  * @export
- * @class SurgeriesListApi
+ * @class SurgeriesApi
  * @extends {BaseAPI}
  */
-export class SurgeriesListApi extends BaseAPI implements SurgeriesListApiInterface {
+export class SurgeriesApi extends BaseAPI implements SurgeriesApiInterface {
     /**
      * Use this method to store new entry into the surgeries list.
      * @summary Saves new entry into surgeries list
@@ -797,10 +797,10 @@ export class SurgeriesListApi extends BaseAPI implements SurgeriesListApiInterfa
      * @param {SurgeryEntry} surgeryEntry Surgery entry to store
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApi
+     * @memberof SurgeriesApi
      */
     public createSurgeryEntry(surgeonId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig) {
-        return SurgeriesListApiFp(this.configuration).createSurgeryEntry(surgeonId, surgeryEntry, options).then((request) => request(this.axios, this.basePath));
+        return SurgeriesApiFp(this.configuration).createSurgeryEntry(surgeonId, surgeryEntry, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -810,10 +810,10 @@ export class SurgeriesListApi extends BaseAPI implements SurgeriesListApiInterfa
      * @param {string} entryId pass the id of the particular entry in the waiting list
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApi
+     * @memberof SurgeriesApi
      */
     public deleteSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig) {
-        return SurgeriesListApiFp(this.configuration).deleteSurgeryEntry(surgeonId, entryId, options).then((request) => request(this.axios, this.basePath));
+        return SurgeriesApiFp(this.configuration).deleteSurgeryEntry(surgeonId, entryId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -822,10 +822,10 @@ export class SurgeriesListApi extends BaseAPI implements SurgeriesListApiInterfa
      * @param {string} surgeonId pass the id of the particular surgeon
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApi
+     * @memberof SurgeriesApi
      */
     public getSurgeryEntries(surgeonId: string, options?: AxiosRequestConfig) {
-        return SurgeriesListApiFp(this.configuration).getSurgeryEntries(surgeonId, options).then((request) => request(this.axios, this.basePath));
+        return SurgeriesApiFp(this.configuration).getSurgeryEntries(surgeonId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -835,10 +835,10 @@ export class SurgeriesListApi extends BaseAPI implements SurgeriesListApiInterfa
      * @param {string} entryId pass the id of the particular entry in the waiting list
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApi
+     * @memberof SurgeriesApi
      */
     public getSurgeryEntry(surgeonId: string, entryId: string, options?: AxiosRequestConfig) {
-        return SurgeriesListApiFp(this.configuration).getSurgeryEntry(surgeonId, entryId, options).then((request) => request(this.axios, this.basePath));
+        return SurgeriesApiFp(this.configuration).getSurgeryEntry(surgeonId, entryId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -849,10 +849,10 @@ export class SurgeriesListApi extends BaseAPI implements SurgeriesListApiInterfa
      * @param {SurgeryEntry} surgeryEntry Waiting list entry to update
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SurgeriesListApi
+     * @memberof SurgeriesApi
      */
     public updateSurgeryEntry(surgeonId: string, entryId: string, surgeryEntry: SurgeryEntry, options?: AxiosRequestConfig) {
-        return SurgeriesListApiFp(this.configuration).updateSurgeryEntry(surgeonId, entryId, surgeryEntry, options).then((request) => request(this.axios, this.basePath));
+        return SurgeriesApiFp(this.configuration).updateSurgeryEntry(surgeonId, entryId, surgeryEntry, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

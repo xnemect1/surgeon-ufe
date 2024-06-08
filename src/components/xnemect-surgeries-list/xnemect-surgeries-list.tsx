@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { SurgeryEntry, SurgeriesListApiFactory } from '../../api/surgeon-wl';
+import { SurgeryEntry, SurgeriesApiFactory } from '../../api/surgeon-wl';
 
 @Component({
   tag: 'xnemect-surgeries-list',
@@ -17,8 +17,8 @@ export class XnemectSurgeriesList {
 
   private async getSurgeonSurgeriesAsync(): Promise<SurgeryEntry[]> {
     try {
-      console.log('SURGERIES COMPONENT');
-      const response = await SurgeriesListApiFactory(undefined, this.apiBase).getSurgeryEntries(this.surgeonId);
+      console.log('Get surgeries for ', this.surgeonId, ' API call.');
+      const response = await SurgeriesApiFactory(undefined, this.apiBase).getSurgeryEntries(this.surgeonId);
       if (response.status < 299) {
         return response.data;
       } else {
@@ -31,6 +31,7 @@ export class XnemectSurgeriesList {
   }
 
   async componentWillLoad() {
+    console.log('New component SURGERIES LIST was rendered !!!');
     this.surgeries = await this.getSurgeonSurgeriesAsync();
   }
 

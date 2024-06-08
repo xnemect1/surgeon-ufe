@@ -1,5 +1,5 @@
 import { Component, Host, Prop, State, h, EventEmitter, Event } from '@stencil/core';
-import { SurgeryEntry, SurgeriesListApiFactory, OperatedLimb, SurgeryOperatedLimbApiFactory } from '../../api/surgeon-wl';
+import { SurgeryEntry, SurgeriesApiFactory, OperatedLimb, SurgeryOperatedLimbApiFactory } from '../../api/surgeon-wl';
 @Component({
   tag: 'xnemect-surgery-editor',
   styleUrl: 'xnemect-surgery-editor.css',
@@ -40,7 +40,7 @@ export class XnemectSurgeryEditor {
       return undefined;
     }
     try {
-      const response = await SurgeriesListApiFactory(undefined, this.apiBase).getSurgeryEntry(this.surgeonId, this.entryId);
+      const response = await SurgeriesApiFactory(undefined, this.apiBase).getSurgeryEntry(this.surgeonId, this.entryId);
 
       if (response.status < 299) {
         this.entry = response.data;
@@ -203,7 +203,7 @@ export class XnemectSurgeryEditor {
   private async updateEntry() {
     try {
       // store or update
-      const api = SurgeriesListApiFactory(undefined, this.apiBase);
+      const api = SurgeriesApiFactory(undefined, this.apiBase);
       const response = this.entryId === '@new' ? await api.createSurgeryEntry(this.surgeonId, this.entry) : await api.updateSurgeryEntry(this.surgeonId, this.entryId, this.entry);
       if (response.status < 299) {
         this.editorClosed.emit('store');
@@ -217,7 +217,7 @@ export class XnemectSurgeryEditor {
 
   private async deleteEntry() {
     try {
-      const response = await SurgeriesListApiFactory(undefined, this.apiBase).deleteSurgeryEntry(this.surgeonId, this.entryId);
+      const response = await SurgeriesApiFactory(undefined, this.apiBase).deleteSurgeryEntry(this.surgeonId, this.entryId);
       if (response.status < 299) {
         this.editorClosed.emit('delete');
       } else {
