@@ -14,10 +14,15 @@
   text-align: center;
 }
 
+/* example-component.css */
 .buttons {
   --md-filled-icon-button-container-size: 4rem;
   --md-filled-icon-button-icon-size: 3rem;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
 }
+
 md-icon {
   color: red;
   background-color: white;

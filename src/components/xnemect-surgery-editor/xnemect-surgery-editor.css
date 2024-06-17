@@ -46,3 +46,17 @@ md-divider {
 .label1 {
   padding: 0px 10px;
 }
+
+.column md-filled-text-field,
+md-filled-select,
+.column select {
+  width: 100%;
+}
+
+.buttons {
+  --md-filled-icon-button-container-size: 4rem;
+  --md-filled-icon-button-icon-size: 3rem;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+}

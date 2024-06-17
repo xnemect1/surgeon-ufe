@@ -8,6 +8,8 @@ import { SurgeryEntry, SurgeriesApiFactory } from '../../api/surgeon-wl';
 })
 export class XnemectSurgeriesList {
   @Event({ eventName: 'entry-clicked' }) entryClicked: EventEmitter<string>;
+  @Event({ eventName: 'surgeries-closed' }) surgeriesClosed: EventEmitter<void>;
+
   @Prop() apiBase: string;
   @Prop() surgeonId: string;
   @Prop() surgeonName: string;
@@ -17,7 +19,6 @@ export class XnemectSurgeriesList {
 
   private async getSurgeonSurgeriesAsync(): Promise<SurgeryEntry[]> {
     try {
-      console.log('Get surgeries for ', this.surgeonId, ' API call.');
       const response = await SurgeriesApiFactory(undefined, this.apiBase).getSurgeryEntries(this.surgeonId);
       if (response.status < 299) {
         return response.data;
@@ -31,7 +32,6 @@ export class XnemectSurgeriesList {
   }
 
   async componentWillLoad() {
-    console.log('New component SURGERIES LIST was rendered !!!');
     this.surgeries = await this.getSurgeonSurgeriesAsync();
   }
 
@@ -48,7 +48,6 @@ export class XnemectSurgeriesList {
               {this.surgeries.map(surgery => (
                 <md-list-item
                   onClick={() => {
-                    console.log('Emitting event for surgery id:', surgery.id);
                     this.entryClicked.emit(surgery.id);
                   }}
                 >
@@ -64,6 +63,14 @@ export class XnemectSurgeriesList {
         <div class="buttons-space">
           <md-outlined-button class="buttons" onclick={() => this.entryClicked.emit('@new')}>
             Pridať novú operáciu
+          </md-outlined-button>
+          <md-outlined-button
+            class="buttons"
+            onClick={() => {
+              this.surgeriesClosed.emit();
+            }}
+          >
+            Späť
           </md-outlined-button>
         </div>
       </Host>

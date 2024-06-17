@@ -106,6 +106,18 @@ export class XnemectSurgeryEditor {
             }}
           ></md-filled-text-field>
 
+          {this.renderConditions()}
+
+          <md-filled-text-field
+            label="Popis operácie"
+            value={this.entry?.surgeryNote}
+            oninput={(ev: InputEvent) => {
+              if (this.entry) {
+                this.entry.surgeryNote = this.handleInputEvent(ev);
+              }
+            }}
+          ></md-filled-text-field>
+
           <div class="in-row">
             <md-checkbox
               id="successfulCheckbox" // Unique ID for the checkbox
@@ -121,29 +133,18 @@ export class XnemectSurgeryEditor {
               Operácia prebehla úspešne
             </label>
           </div>
-
-          {this.renderConditions()}
-          <md-filled-text-field
-            label="Popis operácie"
-            value={this.entry?.surgeryNote}
-            oninput={(ev: InputEvent) => {
-              if (this.entry) {
-                this.entry.surgeryNote = this.handleInputEvent(ev);
-              }
-            }}
-          ></md-filled-text-field>
         </form>
 
         <div class="actions">
-          <md-filled-tonal-button id="delete" disabled={!this.entry || this.entry?.id === '@new'} onClick={() => this.deleteEntry()}>
+          <md-filled-tonal-button class="buttons" id="delete" disabled={!this.entry || this.entry?.id === '@new'} onClick={() => this.deleteEntry()}>
             <md-icon slot="icon">delete</md-icon>
             Zmazať
           </md-filled-tonal-button>
           <span class="stretch-fill"></span>
-          <md-outlined-button id="cancel" onClick={() => this.editorClosed.emit('cancel')}>
+          <md-outlined-button class="buttons" id="cancel" onClick={() => this.editorClosed.emit('cancel')}>
             Zrušiť
           </md-outlined-button>
-          <md-filled-button id="confirm" disabled={!this.isValid} onClick={() => this.updateEntry()}>
+          <md-filled-button class="buttons" id="confirm" disabled={!this.isValid} onClick={() => this.updateEntry()}>
             <md-icon slot="icon">save</md-icon>
             Uložiť
           </md-filled-button>

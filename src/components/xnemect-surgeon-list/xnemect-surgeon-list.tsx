@@ -32,7 +32,6 @@ export class XnemectSurgeonList {
   }
 
   render() {
-    console.log('At initialization => currentSurgeons: ', this.currentSurgeons);
     return (
       <Host>
         <h2>Zoznam chirurgov</h2>
@@ -43,7 +42,6 @@ export class XnemectSurgeonList {
               <md-list-item
                 className="list-item"
                 onClick={() => {
-                  console.log('***********\nSurgeon was chosen with ID:', surgeon.id, '\n**********');
                   this.entryClicked.emit(surgeon.id);
                 }}
               >
