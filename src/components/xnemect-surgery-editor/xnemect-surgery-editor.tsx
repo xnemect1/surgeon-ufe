@@ -24,7 +24,7 @@ export class XnemectSurgeryEditor {
       this.isValid = false;
       this.entry = {
         id: '@new',
-        patientId: this.surgeonId,
+        patientId: '',
         date: '',
         successful: true,
         surgeryNote: '',
@@ -102,6 +102,16 @@ export class XnemectSurgeryEditor {
             oninput={(ev: InputEvent) => {
               if (this.entry) {
                 this.entry.date = this.isoDateToLocale(this.handleInputEvent(ev));
+              }
+            }}
+          ></md-filled-text-field>
+
+          <md-filled-text-field
+            label="ID pacienta"
+            value={this.entry?.patientId}
+            oninput={(ev: InputEvent) => {
+              if (this.entry) {
+                this.entry.patientId = this.handleInputEvent(ev);
               }
             }}
           ></md-filled-text-field>
