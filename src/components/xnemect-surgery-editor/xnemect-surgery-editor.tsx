@@ -215,6 +215,7 @@ export class XnemectSurgeryEditor {
     try {
       // store or update
       const api = SurgeriesApiFactory(undefined, this.apiBase);
+
       const response = this.entryId === '@new' ? await api.createSurgeryEntry(this.surgeonId, this.entry) : await api.updateSurgeryEntry(this.surgeonId, this.entryId, this.entry);
       if (response.status < 299) {
         this.editorClosed.emit('store');
